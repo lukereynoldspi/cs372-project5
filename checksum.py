@@ -5,13 +5,13 @@ PTCL = b'0x06' # Six byte
 
 def open_tcp_addrs(file_number):
     # Reads tcp_addr file
-    tcp_addrs = open(ADDRS_FILE + str(file_number) + ".txt", "r")
+    tcp_addrs = open("tcp_addrs/" + ADDRS_FILE + str(file_number) + ".txt", "r")
     tcp_addrs = tcp_addrs.read()
     return tcp_addrs
 
 def open_tcp_data(file_number):
     # Reads tcp_data file
-    with open(DATA_FILE + str(file_number) + ".dat", "rb") as fp:
+    with open("tcp_data/" + DATA_FILE + str(file_number) + ".dat", "rb") as fp:
         tcp_data = fp.read()
     return tcp_data
 
