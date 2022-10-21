@@ -15,7 +15,9 @@ def tcp_pseudo_header(file_number):
     with open(DATA_FILE + str(file_number) + ".dat", "rb") as fp:
         tcp_data = fp.read()
         tcp_length = len(tcp_data)
-    tcp_length = tcp_length.to_bytes(1, byteorder ='big')
+        tcp_length = tcp_length.to_bytes(1, byteorder ='big')
+        tcp_cksum = tcp_data[16:18]
+        tcp_zero_cksum = tcp_data[:16] + b'\x00\x00' + tcp_data[18:]
 
     # Concats source, destination, byte constants, amnd tcp byte length
     pseudo_header = source_bytestring + destination_bytestring + ZERO_BYTE + PTCL + tcp_length
