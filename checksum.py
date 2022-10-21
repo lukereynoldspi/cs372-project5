@@ -1,23 +1,19 @@
 addrs_file = "tcp_addrs_"
 data_file = "tcp_data_"
-ZERO_BYTE = '0x00'
+ZERO_BYTE = b'0x00'
+PTCL = b'0x06'
 
+def tcp_pseudo_header(file_number):
+    pseudo_header = b''
+    f = open(addrs_file + str(file_number) + ".txt", "r")
+    f = f.read()
+    ip_addresses = f.rstrip().split(" ")
+    source_bytestring, destination_bytestring = tcp_bytestrings(ip_addresses[0], ip_addresses[1])
+    pseudo_header = pseudo_header + source_bytestring + destination_bytestring + ZERO_BYTE + PTCL
 
-def checksum_tester():
-    file_number = 0
-    for i in range(10):
-        pseudo_header = b''
-        f = open(addrs_file + str(file_number) + ".txt", "r")
-        f = f.read()
-        ip_addresses = f.rstrip().split(" ")
-        source_bytestring, destination_bytestring = tcp_bytestrings(ip_addresses[0], ip_addresses[1])
-        pseudo_header = pseudo_header + source_bytestring + destination_bytestring
-
-        with open(data_file + str(file_number) + ".dat", "rb") as fp:
-            tcp_data = fp.read()
-            tcp_length = len(tcp_data)
-
-        file_number += 1
+    with open(data_file + str(file_number) + ".dat", "rb") as fp:
+        tcp_data = fp.read()
+        tcp_length = len(tcp_data)
 
 def tcp_bytestrings(source, destination):
     source = source.split(".")
@@ -33,7 +29,10 @@ def tcp_bytestrings(source, destination):
     return source_bytestring, destination_bytestring
 
 def main():
-    checksum_tester()
+    file_number = 0
+    for file_number in range(10):
+        tcp_pseudo_header(file_number)
+        file_number += 1
 
 if __name__ == "__main__":
     main()
