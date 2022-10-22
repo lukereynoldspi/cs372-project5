@@ -32,7 +32,7 @@ def tcp_bytestrings(source, destination):
 def tcp_data_length(tcp_data):
     # Returns length of tcp_data
     tcp_length = len(tcp_data)
-    tcp_length = tcp_length.to_bytes(1, 'big')
+    tcp_length = tcp_length.to_bytes(2, 'big') # TCP length is 2 bytes
     return tcp_length
 
 def tcp_pseudo_header(tcp_addrs, tcp_data):
