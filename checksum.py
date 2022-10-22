@@ -49,8 +49,7 @@ def tcp_pseudo_header(tcp_addrs, tcp_data):
 
 def tcp_checksum(tcp_data):
     # Splices checksum data into tcp_cksum
-    tcp_cksum = tcp_data[16:18]
-    tcp_cksum = int.from_bytes(tcp_cksum, 'big')
+    tcp_cksum = int.from_bytes(tcp_data[16:18], 'big')
 
     # Makes a version of the tcp_data with 0 as the checksum
     tcp_zero_cksum = tcp_data[:16] + b'\x00\x00' + tcp_data[18:]
@@ -83,11 +82,12 @@ def main():
         pseudo_header = tcp_pseudo_header(tcp_addrs, tcp_data)
         tcp_cksum, tcp_zero_cksum = tcp_checksum(tcp_data)
 
+        # Compares checksums
         total = checksum(pseudo_header, tcp_zero_cksum)
         if tcp_cksum == total:
-            print("PASS")
+            print("File " + str(file_number) + ": " + "PASS")
         else:
-            print("FAIL")
+            print("File " + str(file_number) + ": " + "FAIL")
 
         file_number += 1
 
