@@ -1,7 +1,7 @@
 ADDRS_FILE = "tcp_addrs_"
 DATA_FILE = "tcp_data_"
-ZERO_BYTE = b'0x00' # Zero byte
-PTCL = b'0x06' # Six byte
+ZERO_BYTE = 0
+PTCL = 6 
 
 def open_tcp_addrs(file_number):
     # Reads tcp_addr file
@@ -22,17 +22,17 @@ def tcp_bytestrings(source, destination):
     source_bytestring = b''
     destination_bytestring = b''
     for byte in source:
-        byte = int(byte).to_bytes(1, byteorder ='big')
+        byte = int(byte).to_bytes(1, 'big')
         source_bytestring = source_bytestring + byte
     for byte in destination:
-        byte = int(byte).to_bytes(1, byteorder ='big')
+        byte = int(byte).to_bytes(1, 'big')
         destination_bytestring = destination_bytestring + byte
     return source_bytestring, destination_bytestring
 
 def tcp_data_length(tcp_data):
     # Returns length of tcp_data
     tcp_length = len(tcp_data)
-    tcp_length = tcp_length.to_bytes(1, byteorder ='big')
+    tcp_length = tcp_length.to_bytes(1, 'big')
     return tcp_length
 
 def tcp_pseudo_header(tcp_addrs, tcp_data):
@@ -44,7 +44,7 @@ def tcp_pseudo_header(tcp_addrs, tcp_data):
     tcp_length = tcp_data_length(tcp_data)
    
     # Concats source, destination, byte constants, amnd tcp byte length
-    pseudo_header = source_bytestring + destination_bytestring + ZERO_BYTE + PTCL + tcp_length
+    pseudo_header = source_bytestring + destination_bytestring + ZERO_BYTE.to_bytes(1, 'big') + PTCL.to_bytes(1, 'big') + tcp_length
     return pseudo_header
 
 def tcp_checksum(tcp_data):
